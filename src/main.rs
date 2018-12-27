@@ -126,6 +126,18 @@ mod vector {
         }
     }
 
+    fn dot(a: &Vector, b: &Vector) -> f64 {
+        a.x * b.x + a.y * b.y + a.z * b.z
+    }
+
+    fn cross(a: &Vector, b: &Vector) -> Vector {
+        Vector {
+            x: a.y * b.z - a.z * b.y,
+            y: a.z * b.x - a.x * b.z,
+            z: a.x * b.y - a.y * b.x,
+        }
+    }
+
     #[test]
     fn test_format() {
         use hamcrest::prelude::*;
@@ -189,7 +201,6 @@ mod vector {
             is(equal_to(Vector::new(-1.0, 1.0, 0.0)))
         );
     }
-
     #[test]
     fn test_scale() {
         use hamcrest::prelude::*;
@@ -217,6 +228,22 @@ mod vector {
         assert_that!(
             Vector::new(1.0, -1.0, 2.0) / 2.0,
             is(equal_to(Vector::new(0.5, -0.5, 1.0)))
+        );
+    }
+    #[test]
+    fn test_dot() {
+        use hamcrest::prelude::*;
+        assert_that!(
+            dot(&Vector::new(5.0, 3.0, 4.0), &Vector::new(3.0, -2.0, 2.0)),
+            is(equal_to(17.0))
+        );
+    }
+    #[test]
+    fn test_cross() {
+        use hamcrest::prelude::*;
+        assert_that!(
+            cross(&Vector::new(5.0, 3.0, 4.0), &Vector::new(3.0, -2.0, 2.0)),
+            is(equal_to(Vector::new(14.0, 2.0, -19.0)))
         );
     }
 }
