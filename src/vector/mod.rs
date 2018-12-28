@@ -22,6 +22,17 @@ impl Vector {
             z: 0.0,
         }
     }
+    fn mag(&self) -> f64 {
+        f64::sqrt(self.x * self.x + self.y * self.y + self.z * self.z)
+    }
+    fn unit(&self) -> Vector {
+        let m = self.mag();
+        Vector {
+            x: self.x / m,
+            y: self.y / m,
+            z: self.z / m,
+        }
+    }
 }
 
 impl fmt::Display for Vector {
