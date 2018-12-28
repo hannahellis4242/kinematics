@@ -1,4 +1,5 @@
 use std::fmt;
+mod direction;
 struct FourVector {
     energy: f64,
     momentum: f64,
@@ -6,7 +7,7 @@ struct FourVector {
 
 impl FourVector {
     fn new(e: f64, m: f64) -> Option<FourVector> {
-        if (e >= m) {
+        if e >= m {
             Some(FourVector {
                 energy: e,
                 momentum: f64::sqrt(e * e - m * m),

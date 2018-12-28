@@ -1,11 +1,11 @@
 mod angle;
-use crate::direction::angle::Angle;
+
 struct Direction {
     polar_angle: Angle,
     azmuthal_angle: Angle,
 }
 mod vector;
-use crate::direction::vector::Vector;
+
 impl Direction {
     fn new(p: Angle, a: Angle) -> Direction {
         Direction {
