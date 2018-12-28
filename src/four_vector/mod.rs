@@ -1,16 +1,19 @@
 use std::fmt;
-mod direction;
-struct FourVector {
+pub mod direction;
+use crate::four_vector::direction::Direction;
+pub struct FourVector {
     energy: f64,
     momentum: f64,
+    direction: Direction,
 }
 
 impl FourVector {
-    fn new(e: f64, m: f64) -> Option<FourVector> {
+    pub fn new(e: f64, m: f64, d: Direction) -> Option<FourVector> {
         if e >= m {
             Some(FourVector {
                 energy: e,
                 momentum: f64::sqrt(e * e - m * m),
+                direction: d,
             })
         } else {
             None
@@ -20,7 +23,7 @@ impl FourVector {
 
 impl fmt::Display for FourVector {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "({}, {})", self.energy, self.momentum)
+        write!(f, "({}, {},{})", self.energy, self.momentum, self.direction)
     }
 }
 
@@ -28,28 +31,31 @@ impl fmt::Debug for FourVector {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(
             f,
-            "FourVector {{ energy: {}, momentum: {} }}",
-            self.energy, self.momentum
+            "FourVector {{ energy: {}, momentum: {} , direction: {}}}",
+            self.energy, self.momentum, self.direction
         )
     }
 }
 
 impl PartialEq for FourVector {
     fn eq(&self, other: &FourVector) -> bool {
-        self.energy == other.energy && self.momentum == other.momentum
+        self.energy == other.energy
+            && self.momentum == other.momentum
+            && self.direction == other.direction
     }
 }
 
 #[test]
 fn test_eq() {
     use hamcrest::prelude::*;
-    match FourVector::new(1.0, 1.0) {
+    match FourVector::new(1.0, 1.0, Direction::new(Angle::deg(0.0), Angle::deg(0.0))) {
         Some(v) => {
             assert_that!(
                 v,
                 is(equal_to(FourVector {
                     energy: 1.0,
-                    momentum: 0.0
+                    momentum: 0.0,
+                    direction: Direction::new(Angle::rad(0.0), Angle::rad(0.0)),
                 }))
             );
         }

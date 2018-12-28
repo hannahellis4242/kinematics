@@ -1,19 +1,19 @@
-mod angle;
+pub mod angle;
 use crate::four_vector::direction::angle::Angle;
-struct Direction {
+pub struct Direction {
     polar_angle: Angle,
     azmuthal_angle: Angle,
 }
 mod vector;
 use crate::four_vector::direction::vector::Vector;
 impl Direction {
-    fn new(p: Angle, a: Angle) -> Direction {
+    pub fn new(p: Angle, a: Angle) -> Direction {
         Direction {
             polar_angle: p,
             azmuthal_angle: a,
         }
     }
-    fn to_vec(&self) -> Vector {
+    pub fn to_vec(&self) -> Vector {
         let s = self.polar_angle.sin();
         Vector::new(
             s * self.azmuthal_angle.cos(),
