@@ -48,14 +48,24 @@ impl PartialEq for FourVector {
 #[test]
 fn test_eq() {
     use hamcrest::prelude::*;
-    match FourVector::new(1.0, 1.0, Direction::new(Angle::deg(0.0), Angle::deg(0.0))) {
+    match FourVector::new(
+        1.0,
+        1.0,
+        direction::Direction::new(
+            direction::angle::Angle::deg(0.0),
+            direction::angle::Angle::deg(0.0),
+        ),
+    ) {
         Some(v) => {
             assert_that!(
                 v,
                 is(equal_to(FourVector {
                     energy: 1.0,
                     momentum: 0.0,
-                    direction: Direction::new(Angle::rad(0.0), Angle::rad(0.0)),
+                    direction: direction::Direction::new(
+                        direction::angle::Angle::rad(0.0),
+                        direction::angle::Angle::rad(0.0)
+                    ),
                 }))
             );
         }
