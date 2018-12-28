@@ -9,8 +9,8 @@ fn main() {
         2.0,
         1.0,
         four_vector::direction::Direction::new(
-            four_vector::direction::angle::Angle::deg(0.0),
-            four_vector::direction::angle::Angle::deg(0.0),
+            four_vector::angle::Angle::deg(0.0),
+            four_vector::angle::Angle::deg(0.0),
         ),
     );
     println!("{:?}", v);

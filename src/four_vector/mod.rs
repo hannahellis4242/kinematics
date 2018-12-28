@@ -1,14 +1,15 @@
 use std::fmt;
+pub mod angle;
 pub mod direction;
-use crate::four_vector::direction::Direction;
+pub mod vector;
 pub struct FourVector {
     energy: f64,
     momentum: f64,
-    direction: Direction,
+    direction: direction::Direction,
 }
 
 impl FourVector {
-    pub fn new(e: f64, m: f64, d: Direction) -> Option<FourVector> {
+    pub fn new(e: f64, m: f64, d: direction::Direction) -> Option<FourVector> {
         if e >= m {
             Some(FourVector {
                 energy: e,
@@ -51,10 +52,7 @@ fn test_eq() {
     match FourVector::new(
         1.0,
         1.0,
-        direction::Direction::new(
-            direction::angle::Angle::deg(0.0),
-            direction::angle::Angle::deg(0.0),
-        ),
+        direction::Direction::new(angle::Angle::deg(0.0), angle::Angle::deg(0.0)),
     ) {
         Some(v) => {
             assert_that!(
@@ -63,8 +61,8 @@ fn test_eq() {
                     energy: 1.0,
                     momentum: 0.0,
                     direction: direction::Direction::new(
-                        direction::angle::Angle::rad(0.0),
-                        direction::angle::Angle::rad(0.0)
+                        angle::Angle::rad(0.0),
+                        angle::Angle::rad(0.0)
                     ),
                 }))
             );
