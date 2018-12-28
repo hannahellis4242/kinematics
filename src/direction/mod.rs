@@ -1,15 +1,47 @@
+mod angle;
+use crate::direction::angle::Angle;
 struct Direction {
-    polar_angle:f64,
-    azmuthal_angle:f64,
+    polar_angle: Angle,
+    azmuthal_angle: Angle,
+}
+mod vector;
+use crate::direction::vector::Vector;
+impl Direction {
+    fn new(p: Angle, a: Angle) -> Direction {
+        Direction {
+            polar_angle: p,
+            azmuthal_angle: a,
+        }
+    }
+    fn to_vec(&self) -> Vector {
+        let s = self.polar_angle.sin();
+        Vector::new(
+            s * self.azmuthal_angle.cos(),
+            s * self.azmuthal_angle.sin(),
+            self.polar_angle.cos(),
+        )
+    }
 }
 
-impl Direction {
-    fn new(p,a)->Direction{
-        Direction{polar_angle:p,azmuthal_angle:a}
+use std::fmt;
+impl fmt::Display for Direction {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "<{},{}>", self.polar_angle, self.azmuthal_angle)
     }
-    mod Vector;
-    fn to_vec(&self)->Vector{
-        let s = sin(this.polar_angle);
-        Vector::new(s*cos(this.azmuthal_angle),s*sin(this.azmuthal_angle),cos(this.polar_angle))
+}
+
+impl fmt::Debug for Direction {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(
+            f,
+            "Direction {{ polar_angle: {} , azmuthal_angle: {} }}",
+            self.polar_angle, self.azmuthal_angle
+        )
+    }
+}
+
+impl PartialEq for Direction {
+    fn eq(&self, other: &Direction) -> bool {
+        self.polar_angle == other.polar_angle && self.azmuthal_angle == other.azmuthal_angle
     }
 }

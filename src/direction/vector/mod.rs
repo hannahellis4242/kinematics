@@ -5,14 +5,14 @@ use std::ops::Mul;
 use std::ops::Neg;
 use std::ops::Sub;
 
-struct Vector {
+pub struct Vector {
     x: f64,
     y: f64,
     z: f64,
 }
 
 impl Vector {
-    fn new(x: f64, y: f64, z: f64) -> Vector {
+    pub fn new(x: f64, y: f64, z: f64) -> Vector {
         Vector { x: x, y: y, z: z }
     }
     fn zeros() -> Vector {

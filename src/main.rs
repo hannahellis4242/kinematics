@@ -3,8 +3,8 @@ extern crate clap;
 #[macro_use]
 extern crate hamcrest;
 
+mod direction;
 mod four_vector;
-mod vector;
 
 fn main() {}
 /*fn main() {
