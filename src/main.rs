@@ -6,8 +6,8 @@ extern crate hamcrest;
 mod four_vector;
 fn main() {
     let v = four_vector::FourVector::new(
-        1.0,
         2.0,
+        1.0,
         four_vector::direction::Direction::new(
             four_vector::direction::angle::Angle::deg(0.0),
             four_vector::direction::angle::Angle::deg(0.0),
