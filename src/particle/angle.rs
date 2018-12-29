@@ -1,3 +1,6 @@
+use std::ops::Add;
+use std::ops::Sub;
+
 pub enum Angle {
     Radian(f64),
     Degree(f64),
@@ -184,6 +187,72 @@ impl Clone for Angle {
             Angle::Degree(v) => Angle::Degree(*v),
             Angle::Gradian(v) => Angle::Gradian(*v),
             Angle::Circle(v) => Angle::Circle(*v),
+        }
+    }
+}
+
+impl Add for Angle {
+    type Output = Angle;
+
+    fn add(self, other: Angle) -> Angle {
+        match self {
+            Angle::Radian(x) => match other {
+                Angle::Radian(y) => Angle::Radian(x + y),
+                Angle::Degree(y) => Angle::Radian(x + deg_to_rad(y)),
+                Angle::Gradian(y) => Angle::Radian(x + grad_to_rad(y)),
+                Angle::Circle(y) => Angle::Radian(x + circ_to_rad(y)),
+            },
+            Angle::Degree(x) => match other {
+                Angle::Radian(y) => Angle::Degree(x + rad_to_deg(y)),
+                Angle::Degree(y) => Angle::Degree(x + y),
+                Angle::Gradian(y) => Angle::Degree(x + grad_to_deg(y)),
+                Angle::Circle(y) => Angle::Degree(x + circ_to_deg(y)),
+            },
+            Angle::Gradian(x) => match other {
+                Angle::Radian(y) => Angle::Gradian(x + rad_to_grad(y)),
+                Angle::Degree(y) => Angle::Gradian(x + deg_to_grad(y)),
+                Angle::Gradian(y) => Angle::Gradian(x + y),
+                Angle::Circle(y) => Angle::Gradian(x + circ_to_grad(y)),
+            },
+            Angle::Circle(x) => match other {
+                Angle::Radian(y) => Angle::Circle(x + rad_to_circ(y)),
+                Angle::Degree(y) => Angle::Circle(x + deg_to_circ(y)),
+                Angle::Gradian(y) => Angle::Circle(x + grad_to_circ(y)),
+                Angle::Circle(y) => Angle::Circle(x + y),
+            },
+        }
+    }
+}
+
+impl Sub for Angle {
+    type Output = Angle;
+
+    fn sub(self, other: Angle) -> Angle {
+        match self {
+            Angle::Radian(x) => match other {
+                Angle::Radian(y) => Angle::Radian(x - y),
+                Angle::Degree(y) => Angle::Radian(x - deg_to_rad(y)),
+                Angle::Gradian(y) => Angle::Radian(x - grad_to_rad(y)),
+                Angle::Circle(y) => Angle::Radian(x - circ_to_rad(y)),
+            },
+            Angle::Degree(x) => match other {
+                Angle::Radian(y) => Angle::Degree(x - rad_to_deg(y)),
+                Angle::Degree(y) => Angle::Degree(x - y),
+                Angle::Gradian(y) => Angle::Degree(x - grad_to_deg(y)),
+                Angle::Circle(y) => Angle::Degree(x - circ_to_deg(y)),
+            },
+            Angle::Gradian(x) => match other {
+                Angle::Radian(y) => Angle::Gradian(x - rad_to_grad(y)),
+                Angle::Degree(y) => Angle::Gradian(x - deg_to_grad(y)),
+                Angle::Gradian(y) => Angle::Gradian(x - y),
+                Angle::Circle(y) => Angle::Gradian(x - circ_to_grad(y)),
+            },
+            Angle::Circle(x) => match other {
+                Angle::Radian(y) => Angle::Circle(x - rad_to_circ(y)),
+                Angle::Degree(y) => Angle::Circle(x - deg_to_circ(y)),
+                Angle::Gradian(y) => Angle::Circle(x - grad_to_circ(y)),
+                Angle::Circle(y) => Angle::Circle(x - y),
+            },
         }
     }
 }

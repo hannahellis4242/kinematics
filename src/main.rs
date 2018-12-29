@@ -5,21 +5,16 @@ extern crate hamcrest;
 
 mod particle;
 fn main() {
-    particle::Particle::new(
-        "parent",
-        1.0,
+    let result = particle::two_body_decay(
         2.0,
+        0.5,
+        0.5,
         particle::direction::Direction::new(
-            particle::angle::Angle::deg(0.0),
+            particle::angle::Angle::deg(30.0),
             particle::angle::Angle::deg(0.0),
         ),
-    )
-    .map(|p| {
-        println!("{}", p);
-        println!("beta : {}", p.beta());
-        println!("gamma : {}", p.gamma());
-        println!("gammabeta : {}", p.gammabeta());
-    });
+    );
+    println!("{:?}", result);
 }
 /*fn main() {
     use clap::{App, Arg, SubCommand};

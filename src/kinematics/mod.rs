@@ -4,25 +4,19 @@ trait Solvable {
     fn solve(&self) -> Option<solution>;
 }
 
-struct Vector{
+struct Vector {}
 
+struct FourVector {}
+
+struct TwoBodyDecayWithKnownCentreOfMassAngle {
+    parent_mass: f64,
+    parent_energy: f64,
+    child_one_mass: f64,
+    child_two_mass: f64,
+    polar_angle: f64,
+    azmuthal_angle: f64,
 }
 
-struct FourVector{
+struct TwoBodyDecayWithKnownCentreOfMassAngleSolution {}
 
-}
-
-struct TwoBodyDecayWithKnownCentreOfMassAngle{
-    parent_mass:f64,
-    parent_energy:f64,
-    child_one_mass:f64,
-    child_two_mass:f64,
-    polar_angle:f64,
-    azmuthal_angle:f64,
-}
-
-struct TwoBodyDecayWithKnownCentreOfMassAngleSolution{
-
-}
-
-enum Problem ;
+enum Problem {}

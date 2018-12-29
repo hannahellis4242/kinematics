@@ -13,8 +13,8 @@ impl Direction {
     }
     pub fn zero() -> Direction {
         Direction {
-            polar_angle: angle::Angle::rad(0.0),
-            azmuthal_angle: angle::Angle::rad(0.0),
+            polar_angle: angle::Angle::deg(0.0),
+            azmuthal_angle: angle::Angle::deg(0.0),
         }
     }
     pub fn to_vec(&self) -> vector::Vector {
@@ -24,6 +24,12 @@ impl Direction {
             s * self.azmuthal_angle.sin(),
             self.polar_angle.cos(),
         )
+    }
+    pub fn oposite(&self) -> Direction {
+        Direction {
+            polar_angle: angle::Angle::deg(180.0) - self.polar_angle.clone(),
+            azmuthal_angle: self.azmuthal_angle.clone() + angle::Angle::deg(180.0),
+        }
     }
 }
 

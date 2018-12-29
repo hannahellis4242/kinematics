@@ -87,12 +87,30 @@ impl Clone for Particle {
     }
 }
 
+fn daughter_cm_energy(parent_mass: f64, daughter_mass: f64, daughter_other_mass: f64) -> f64 {
+    (parent_mass * parent_mass + daughter_mass * daughter_mass
+        - daughter_other_mass * daughter_other_mass)
+        / (2.0 * parent_mass)
+}
+
 pub fn two_body_decay(
     parent_mass: f64,
     daughter_1_mass: f64,
     daughter_2_mass: f64,
-    angle: angle::Angle,
-) -> (Particle, Particle, Particle) {
+    daughter_1_direction: direction::Direction,
+) -> (Particle, Option<Particle>, Option<Particle>) {
     let parent = Particle::rest("parent cm", parent_mass);
-    (parent.clone(), parent.clone(), parent)
+    let daughter_1_energy = daughter_cm_energy(parent_mass, daughter_1_mass, daughter_2_mass);
+    let daughter_2_energy = daughter_cm_energy(parent_mass, daughter_2_mass, daughter_1_mass);
+    let oposite = daughter_1_direction.oposite();
+    (
+        parent,
+        Particle::new(
+            "daughter_1",
+            daughter_1_mass,
+            daughter_1_energy,
+            daughter_1_direction,
+        ),
+        Particle::new("daughter_2", daughter_2_mass, daughter_2_energy, oposite),
+    )
 }
