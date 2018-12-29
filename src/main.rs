@@ -3,17 +3,23 @@ extern crate clap;
 #[macro_use]
 extern crate hamcrest;
 
-mod four_vector;
+mod particle;
 fn main() {
-    let v = four_vector::FourVector::new(
-        2.0,
+    particle::Particle::new(
+        "parent",
         1.0,
-        four_vector::direction::Direction::new(
-            four_vector::angle::Angle::deg(0.0),
-            four_vector::angle::Angle::deg(0.0),
+        2.0,
+        particle::direction::Direction::new(
+            particle::angle::Angle::deg(0.0),
+            particle::angle::Angle::deg(0.0),
         ),
-    );
-    println!("{:?}", v);
+    )
+    .map(|p| {
+        println!("{}", p);
+        println!("beta : {}", p.beta());
+        println!("gamma : {}", p.gamma());
+        println!("gammabeta : {}", p.gammabeta());
+    });
 }
 /*fn main() {
     use clap::{App, Arg, SubCommand};

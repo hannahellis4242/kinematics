@@ -11,10 +11,10 @@ impl Direction {
             azmuthal_angle: a,
         }
     }
-    pub fn zero()->Direction{
+    pub fn zero() -> Direction {
         Direction {
-            polar_angle: angle::Angle::rad(0),
-            azmuthal_angle: angle::Angle::rad(0),
+            polar_angle: angle::Angle::rad(0.0),
+            azmuthal_angle: angle::Angle::rad(0.0),
         }
     }
     pub fn to_vec(&self) -> vector::Vector {
@@ -47,5 +47,14 @@ impl fmt::Debug for Direction {
 impl PartialEq for Direction {
     fn eq(&self, other: &Direction) -> bool {
         self.polar_angle == other.polar_angle && self.azmuthal_angle == other.azmuthal_angle
+    }
+}
+
+impl Clone for Direction {
+    fn clone(&self) -> Self {
+        Direction {
+            polar_angle: self.polar_angle.clone(),
+            azmuthal_angle: self.azmuthal_angle.clone(),
+        }
     }
 }

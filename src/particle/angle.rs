@@ -177,6 +177,17 @@ impl PartialEq for Angle {
     }
 }
 
+impl Clone for Angle {
+    fn clone(&self) -> Self {
+        match self {
+            Angle::Radian(v) => Angle::Radian(*v),
+            Angle::Degree(v) => Angle::Degree(*v),
+            Angle::Gradian(v) => Angle::Gradian(*v),
+            Angle::Circle(v) => Angle::Circle(*v),
+        }
+    }
+}
+
 #[test]
 fn test_angle() {
     use hamcrest::prelude::*;
