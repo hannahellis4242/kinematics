@@ -4,6 +4,10 @@ pub struct Direction {
     polar_angle: angle::Angle,
     azmuthal_angle: angle::Angle,
 }
+
+fn atan2(y: f64, x: f64) -> f64 {
+    y.atan2(x)
+}
 impl Direction {
     pub fn new(p: angle::Angle, a: angle::Angle) -> Direction {
         Direction {
@@ -15,6 +19,18 @@ impl Direction {
         Direction {
             polar_angle: angle::Angle::deg(0.0),
             azmuthal_angle: angle::Angle::deg(0.0),
+        }
+    }
+    pub fn from(v: vector::Vector) -> Direction {
+        let u = v.unit();
+        let x = vector::dot(&u, &vector::Vector::i());
+        let y = vector::dot(&u, &vector::Vector::j());
+        let z = vector::dot(&u, &vector::Vector::k());
+        let theta = z.acos();
+        let phi = atan2(y, x);
+        Direction {
+            polar_angle: angle::Angle::rad(theta),
+            azmuthal_angle: angle::Angle::rad(phi),
         }
     }
     pub fn to_vec(&self) -> vector::Vector {
@@ -29,6 +45,12 @@ impl Direction {
         Direction {
             polar_angle: angle::Angle::deg(180.0) - self.polar_angle.clone(),
             azmuthal_angle: self.azmuthal_angle.clone() + angle::Angle::deg(180.0),
+        }
+    }
+    pub fn to_deg(&self) -> Direction {
+        Direction {
+            polar_angle: self.polar_angle.to_deg(),
+            azmuthal_angle: self.azmuthal_angle.to_deg(),
         }
     }
 }

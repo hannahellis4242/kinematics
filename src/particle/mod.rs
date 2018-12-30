@@ -49,6 +49,10 @@ impl Particle {
     pub fn gammabeta(&self) -> f64 {
         self.momentum / self.mass
     }
+
+    pub fn lorentz(&self, beta: f64, betagamma: f64, d: direction::Direction) -> Particle {
+        self.clone()
+    }
 }
 
 impl fmt::Display for Particle {
@@ -102,7 +106,7 @@ pub fn two_body_decay(
     let parent = Particle::rest("parent cm", parent_mass);
     let daughter_1_energy = daughter_cm_energy(parent_mass, daughter_1_mass, daughter_2_mass);
     let daughter_2_energy = daughter_cm_energy(parent_mass, daughter_2_mass, daughter_1_mass);
-    let oposite = daughter_1_direction.oposite();
+    let daughter_2_direction = daughter_1_direction.oposite();
     (
         parent,
         Particle::new(
@@ -111,6 +115,11 @@ pub fn two_body_decay(
             daughter_1_energy,
             daughter_1_direction,
         ),
-        Particle::new("daughter_2", daughter_2_mass, daughter_2_energy, oposite),
+        Particle::new(
+            "daughter_2",
+            daughter_2_mass,
+            daughter_2_energy,
+            daughter_2_direction,
+        ),
     )
 }

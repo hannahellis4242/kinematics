@@ -12,6 +12,27 @@ pub struct Vector {
 }
 
 impl Vector {
+    pub fn i() -> Vector {
+        Vector {
+            x: 1.0,
+            y: 0.0,
+            z: 0.0,
+        }
+    }
+    pub fn j() -> Vector {
+        Vector {
+            x: 0.0,
+            y: 1.0,
+            z: 0.0,
+        }
+    }
+    pub fn k() -> Vector {
+        Vector {
+            x: 0.0,
+            y: 0.0,
+            z: 1.0,
+        }
+    }
     pub fn new(x: f64, y: f64, z: f64) -> Vector {
         Vector { x: x, y: y, z: z }
     }
@@ -25,7 +46,7 @@ impl Vector {
     fn mag(&self) -> f64 {
         f64::sqrt(self.x * self.x + self.y * self.y + self.z * self.z)
     }
-    fn unit(&self) -> Vector {
+    pub fn unit(&self) -> Vector {
         let m = self.mag();
         Vector {
             x: self.x / m,
@@ -131,7 +152,7 @@ impl Div<f64> for Vector {
     }
 }
 
-fn dot(a: &Vector, b: &Vector) -> f64 {
+pub fn dot(a: &Vector, b: &Vector) -> f64 {
     a.x * b.x + a.y * b.y + a.z * b.z
 }
 
