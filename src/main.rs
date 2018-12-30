@@ -5,16 +5,54 @@ extern crate hamcrest;
 
 mod particle;
 fn main() {
-    let result = particle::two_body_decay(
-        2.0,
-        0.5,
-        0.5,
-        particle::direction::Direction::new(
-            particle::angle::Angle::deg(30.0),
-            particle::angle::Angle::deg(0.0),
-        ),
-    );
-    println!("{:?}", result);
+    let energy = 3.0;
+    let mass = 2.0;
+    particle::Particle::new(
+        "parent lab",
+        mass,
+        energy,
+        particle::direction::Direction::zero(),
+    )
+    .map(|lab_parent| {
+        match particle::two_body_decay(
+            2.0,
+            0.5,
+            0.5,
+            particle::direction::Direction::new(
+                particle::angle::Angle::deg(90.0),
+                particle::angle::Angle::deg(0.0),
+            ),
+        ) {
+            (parent, Some(daughter_1), Some(daughter_2)) => {
+                println!("Centre of mass frame");
+                println!("--------------------");
+                println!("parent : {}", parent);
+                println!("daughter_1 : {}", daughter_1);
+                println!("daughter_2 : {}", daughter_2);
+                println!("====================");
+
+                let gamma = lab_parent.gamma();
+                let gammabeta = lab_parent.gammabeta();
+                let boost_direction = particle::direction::Direction::zero().oposite();
+                println!("lab frame");
+                println!("--------------------");
+                println!(
+                    "parent lab : {}",
+                    parent.lorentz(gamma, gammabeta, boost_direction.clone())
+                );
+                println!(
+                    "daughter_1 {}",
+                    daughter_1.lorentz(gamma, gammabeta, boost_direction.clone())
+                );
+                println!(
+                    "daughter_2 {}",
+                    daughter_2.lorentz(gamma, gammabeta, boost_direction)
+                );
+                println!("====================");
+            }
+            _ => println!("Error"),
+        }
+    });
 }
 /*fn main() {
     use clap::{App, Arg, SubCommand};

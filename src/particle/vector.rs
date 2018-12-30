@@ -43,7 +43,7 @@ impl Vector {
             z: 0.0,
         }
     }
-    fn mag(&self) -> f64 {
+    pub fn mag(&self) -> f64 {
         f64::sqrt(self.x * self.x + self.y * self.y + self.z * self.z)
     }
     pub fn unit(&self) -> Vector {
@@ -148,6 +148,16 @@ impl Div<f64> for Vector {
                 y: self.y / rhs,
                 z: self.z / rhs,
             }
+        }
+    }
+}
+
+impl Clone for Vector {
+    fn clone(&self) -> Self {
+        Vector {
+            x: self.x,
+            y: self.y,
+            z: self.z,
         }
     }
 }

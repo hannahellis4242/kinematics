@@ -50,8 +50,21 @@ impl Particle {
         self.momentum / self.mass
     }
 
-    pub fn lorentz(&self, beta: f64, betagamma: f64, d: direction::Direction) -> Particle {
-        self.clone()
+    pub fn lorentz(&self, gamma: f64, betagamma: f64, d: direction::Direction) -> Particle {
+        let p_vec = self.direction.to_vec();
+        let d_vec = d.to_vec();
+        let parellel = vector::dot(&p_vec, &d_vec); //since directions are already units, no need to divide by a magitude
+        let perp = p_vec - parellel * d_vec.clone();
+        let energy_dash = gamma * self.energy - betagamma * parellel * self.momentum;
+        let parellel_dash = gamma * parellel * self.momentum - betagamma * self.energy;
+        let p_dash = perp + parellel_dash * d_vec;
+        Particle {
+            name: self.name.clone(),
+            mass: self.mass,
+            energy: energy_dash,
+            momentum: p_dash.mag(),
+            direction: direction::Direction::from(p_dash).to_deg(),
+        }
     }
 }
 
@@ -110,13 +123,13 @@ pub fn two_body_decay(
     (
         parent,
         Particle::new(
-            "daughter_1",
+            "daughter_1 cm",
             daughter_1_mass,
             daughter_1_energy,
             daughter_1_direction,
         ),
         Particle::new(
-            "daughter_2",
+            "daughter_2 cm",
             daughter_2_mass,
             daughter_2_energy,
             daughter_2_direction,
