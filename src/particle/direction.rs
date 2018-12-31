@@ -23,27 +23,16 @@ impl Direction {
         }
     }
     pub fn from(v: vector::Vector) -> Direction {
-        println!("--------Direction::from--------");
-        println!("vector in : {}", v);
         let u = v.unit();
-        println!("unit vector : {}", u);
         let x = vector::dot(&u, &vector::Vector::i());
         let y = vector::dot(&u, &vector::Vector::j());
         let z = vector::dot(&u, &vector::Vector::k());
-        println!("unit vector x : {}", x);
-        println!("unit vector y : {}", y);
-        println!("unit vector z : {}", z);
         let theta = z.acos();
         let phi = atan2(y, x);
-        println!("theta : {}r", theta);
-        println!("phi : {}r", phi);
-        let result = Direction {
+        Direction {
             polar_angle: angle::Angle::rad(theta),
             azmuthal_angle: angle::Angle::rad(phi),
-        };
-        println!("result : {}", result);
-        println!("========Direction::from========");
-        result
+        }
     }
     pub fn to_vec(&self) -> vector::Vector {
         let s = self.polar_angle.sin();
