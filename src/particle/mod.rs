@@ -1,6 +1,7 @@
 use std::fmt;
 pub mod angle;
 pub mod direction;
+pub mod modulo;
 pub mod vector;
 pub struct Particle {
     name: String,
@@ -51,20 +52,32 @@ impl Particle {
     }
 
     pub fn lorentz(&self, gamma: f64, betagamma: f64, d: direction::Direction) -> Particle {
+        println!("--------lorentz--------");
+        println!("gamma : {}", gamma);
+        println!("betagamma : {}", betagamma);
+        println!("boost direction : {}", d);
+        println!("particle : {:?}", self);
         let p_vec = self.direction.to_vec();
+        println!("p_vec : {}", p_vec);
         let d_vec = d.to_vec();
+        println!("d_vec : {}", d_vec);
         let parellel = vector::dot(&p_vec, &d_vec); //since directions are already units, no need to divide by a magitude
+        println!("parellel : {}", parellel);
         let perp = p_vec - parellel * d_vec.clone();
+        println!("perp : {}", perp);
         let energy_dash = gamma * self.energy - betagamma * parellel * self.momentum;
         let parellel_dash = gamma * parellel * self.momentum - betagamma * self.energy;
         let p_dash = perp + parellel_dash * d_vec;
-        Particle {
-            name: self.name.clone(),
+        let result = Particle {
+            name: format!("{}'", self.name),
             mass: self.mass,
             energy: energy_dash,
             momentum: p_dash.mag(),
             direction: direction::Direction::from(p_dash).to_deg(),
-        }
+        };
+        println!("result : {:?}", result);
+        println!("========lorentz========");
+        result
     }
 }
 

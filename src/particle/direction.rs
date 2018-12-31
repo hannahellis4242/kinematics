@@ -8,6 +8,7 @@ pub struct Direction {
 fn atan2(y: f64, x: f64) -> f64 {
     y.atan2(x)
 }
+
 impl Direction {
     pub fn new(p: angle::Angle, a: angle::Angle) -> Direction {
         Direction {
@@ -22,16 +23,27 @@ impl Direction {
         }
     }
     pub fn from(v: vector::Vector) -> Direction {
+        println!("--------Direction::from--------");
+        println!("vector in : {}", v);
         let u = v.unit();
+        println!("unit vector : {}", u);
         let x = vector::dot(&u, &vector::Vector::i());
         let y = vector::dot(&u, &vector::Vector::j());
         let z = vector::dot(&u, &vector::Vector::k());
+        println!("unit vector x : {}", x);
+        println!("unit vector y : {}", y);
+        println!("unit vector z : {}", z);
         let theta = z.acos();
         let phi = atan2(y, x);
-        Direction {
+        println!("theta : {}r", theta);
+        println!("phi : {}r", phi);
+        let result = Direction {
             polar_angle: angle::Angle::rad(theta),
             azmuthal_angle: angle::Angle::rad(phi),
-        }
+        };
+        println!("result : {}", result);
+        println!("========Direction::from========");
+        result
     }
     pub fn to_vec(&self) -> vector::Vector {
         let s = self.polar_angle.sin();
@@ -42,9 +54,16 @@ impl Direction {
         )
     }
     pub fn oposite(&self) -> Direction {
+        use super::modulo::Modulo;
         Direction {
-            polar_angle: angle::Angle::deg(180.0) - self.polar_angle.clone(),
-            azmuthal_angle: self.azmuthal_angle.clone() + angle::Angle::deg(180.0),
+            polar_angle: if self.polar_angle == angle::Angle::deg(0.0) {
+                angle::Angle::deg(180.0)
+            } else {
+                (angle::Angle::deg(180.0) - self.polar_angle.clone())
+                    .modulo(&angle::Angle::deg(180.0))
+            },
+            azmuthal_angle: (self.azmuthal_angle.clone() + angle::Angle::deg(180.0))
+                .modulo(&angle::Angle::deg(360.0)),
         }
     }
     pub fn to_deg(&self) -> Direction {

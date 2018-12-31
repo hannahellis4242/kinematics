@@ -1,6 +1,3 @@
-use std::ops::Add;
-use std::ops::Sub;
-
 pub enum Angle {
     Radian(f64),
     Degree(f64),
@@ -62,6 +59,11 @@ fn circ_to_grad(x: f64) -> f64 {
     x * 400.0
 }
 
+fn round(x: f64, places: i32) -> f64 {
+    let m = f64::powi(10.0, places);
+    (x * m).round() / m
+}
+
 impl Angle {
     pub fn rad(v: f64) -> Angle {
         Angle::Radian(v)
@@ -110,18 +112,18 @@ impl Angle {
     }
     pub fn sin(&self) -> f64 {
         match self {
-            Angle::Radian(v) => f64::sin(*v),
-            Angle::Degree(v) => f64::sin(deg_to_rad(*v)),
-            Angle::Gradian(v) => f64::sin(grad_to_rad(*v)),
-            Angle::Circle(v) => f64::sin(circ_to_rad(*v)),
+            Angle::Radian(v) => round(f64::sin(*v), 15),
+            Angle::Degree(v) => round(f64::sin(deg_to_rad(*v)), 15),
+            Angle::Gradian(v) => round(f64::sin(grad_to_rad(*v)), 15),
+            Angle::Circle(v) => round(f64::sin(circ_to_rad(*v)), 15),
         }
     }
     pub fn cos(&self) -> f64 {
         match self {
-            Angle::Radian(v) => f64::cos(*v),
-            Angle::Degree(v) => f64::cos(deg_to_rad(*v)),
-            Angle::Gradian(v) => f64::cos(grad_to_rad(*v)),
-            Angle::Circle(v) => f64::cos(circ_to_rad(*v)),
+            Angle::Radian(v) => round(f64::cos(*v), 15),
+            Angle::Degree(v) => round(f64::cos(deg_to_rad(*v)), 15),
+            Angle::Gradian(v) => round(f64::cos(grad_to_rad(*v)), 15),
+            Angle::Circle(v) => round(f64::cos(circ_to_rad(*v)), 15),
         }
     }
 }
@@ -130,10 +132,10 @@ use std::fmt;
 impl fmt::Display for Angle {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
-            Angle::Radian(v) => write!(f, "{}r", v),
-            Angle::Degree(v) => write!(f, "{}°", v),
-            Angle::Gradian(v) => write!(f, "{}g", v),
-            Angle::Circle(v) => write!(f, "{}", v),
+            Angle::Radian(v) => write!(f, "{:.15}r", v),
+            Angle::Degree(v) => write!(f, "{:.15}°", v),
+            Angle::Gradian(v) => write!(f, "{:.15}g", v),
+            Angle::Circle(v) => write!(f, "{:.15}", v),
         }
     }
 }
@@ -191,6 +193,7 @@ impl Clone for Angle {
     }
 }
 
+use std::ops::Add;
 impl Add for Angle {
     type Output = Angle;
 
@@ -224,6 +227,7 @@ impl Add for Angle {
     }
 }
 
+use std::ops::Sub;
 impl Sub for Angle {
     type Output = Angle;
 
@@ -252,6 +256,45 @@ impl Sub for Angle {
                 Angle::Degree(y) => Angle::Circle(x - deg_to_circ(y)),
                 Angle::Gradian(y) => Angle::Circle(x - grad_to_circ(y)),
                 Angle::Circle(y) => Angle::Circle(x - y),
+            },
+        }
+    }
+}
+
+use super::modulo;
+impl modulo::Modulo for f64 {
+    type Output = f64;
+    fn modulo(&self, rhs: &f64) -> f64 {
+        (self % rhs + rhs) % rhs
+    }
+}
+impl modulo::Modulo for Angle {
+    type Output = Angle;
+    fn modulo(&self, rhs: &Angle) -> Angle {
+        match self {
+            Angle::Radian(x) => match rhs {
+                Angle::Radian(y) => Angle::Radian(x.modulo(y)),
+                Angle::Degree(y) => Angle::Radian(x.modulo(&deg_to_rad(*y))),
+                Angle::Gradian(y) => Angle::Radian(x.modulo(&grad_to_rad(*y))),
+                Angle::Circle(y) => Angle::Radian(x.modulo(&circ_to_rad(*y))),
+            },
+            Angle::Degree(x) => match rhs {
+                Angle::Radian(y) => Angle::Degree(x.modulo(&rad_to_deg(*y))),
+                Angle::Degree(y) => Angle::Degree(x.modulo(y)),
+                Angle::Gradian(y) => Angle::Degree(x.modulo(&grad_to_deg(*y))),
+                Angle::Circle(y) => Angle::Degree(x.modulo(&circ_to_deg(*y))),
+            },
+            Angle::Gradian(x) => match rhs {
+                Angle::Radian(y) => Angle::Gradian(x.modulo(&rad_to_grad(*y))),
+                Angle::Degree(y) => Angle::Gradian(x.modulo(&deg_to_grad(*y))),
+                Angle::Gradian(y) => Angle::Gradian(x.modulo(y)),
+                Angle::Circle(y) => Angle::Gradian(x.modulo(&circ_to_grad(*y))),
+            },
+            Angle::Circle(x) => match rhs {
+                Angle::Radian(y) => Angle::Circle(x.modulo(&rad_to_circ(*y))),
+                Angle::Degree(y) => Angle::Circle(x.modulo(&deg_to_circ(*y))),
+                Angle::Gradian(y) => Angle::Circle(x.modulo(&grad_to_circ(*y))),
+                Angle::Circle(y) => Angle::Circle(x.modulo(y)),
             },
         }
     }
