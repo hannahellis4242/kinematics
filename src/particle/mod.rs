@@ -57,7 +57,7 @@ impl Particle {
         println!("betagamma : {}", betagamma);
         println!("boost direction : {}", d);
         println!("particle : {:?}", self);
-        let p_vec = self.direction.to_vec();
+        let p_vec = self.momentum * self.direction.to_vec();
         println!("p_vec : {}", p_vec);
         let d_vec = d.to_vec();
         println!("d_vec : {}", d_vec);
@@ -65,9 +65,12 @@ impl Particle {
         println!("parellel : {}", parellel);
         let perp = p_vec - parellel * d_vec.clone();
         println!("perp : {}", perp);
-        let energy_dash = gamma * self.energy - betagamma * parellel * self.momentum;
-        let parellel_dash = gamma * parellel * self.momentum - betagamma * self.energy;
+        let energy_dash = gamma * self.energy - betagamma * parellel;
+        let parellel_dash = gamma * parellel - betagamma * self.energy;
         let p_dash = perp + parellel_dash * d_vec;
+        println!("energy_dash : {}", energy_dash);
+        println!("parellel_dash : {}", parellel_dash);
+        println!("p_dash : {}", p_dash);
         let result = Particle {
             name: format!("{}'", self.name),
             mass: self.mass,
